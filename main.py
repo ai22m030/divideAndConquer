@@ -1,7 +1,6 @@
 # This is a sample Python script.
 from hull_lib import Point
 from hull_lib import divide_conquer
-from hull_lib import cross_product
 from hull_lib import jarvis_march
 
 
@@ -73,15 +72,18 @@ if __name__ == '__main__':
     '''
     for point1 in points:
         for point2 in points:
-            print(cross_product(point1, point2))
+            print(point1 * point2)
     '''
+
+    # print(Point(2, 5) * Point(2, 4))
 
     print('divide: ')
     for point in points:
         print(point)
-
+    '''
     points = jarvis_march(points_original)
 
     print('jarvis:')
     for point in points:
         print(point)
+    '''

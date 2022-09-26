@@ -8,14 +8,23 @@ class Point:
         self.cw_next = None
         self.ccw_next = None
 
-    def subtract(self, p):
-        return Point(self.x - p.x, self.y - p.y)
+    def is_left_turn(self, p):
+        return (self * p) < 0
+
+    def is_right_turn(self, p):
+        return (self * p) > 0
 
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
     def __eq__(self, p):
         return self.x == p.x and self.y == p.y
+
+    def __mul__(self, p):
+        return self.x * p.y - p.x * self.y
+
+    def __sub__(self, p):
+        return Point(self.x - p.x, self.y - p.y)
 
 
 def merge(chull1, chull2):
@@ -80,20 +89,9 @@ def merge(chull1, chull2):
     return result
 
 
-def cross_product(p1, p2):
-    return p1.x * p2.y - p2.x * p1.y
-
-
 def direction(p1, p2, p3):
-    return cross_product(p3.subtract(p1), p2.subtract(p1))
-
-
-def left(p1, p2):
-    return cross_product(p1, p2) < 0
-
-
-def right(p1, p2):
-    return cross_product(p1, p2) > 0
+    # return cross_product(p3.subtract(p1), p2.subtract(p1))
+    return (p3 - p1) * (p2 - p1)
 
 
 def collinear(p1, p2, p3):
@@ -140,7 +138,7 @@ def jarvis_march(points):
             # find the greatest left turn
             # in case of collinearity, consider the farthest point
             d = direction(points[pos], points[i], points[q])
-            if d > 0 or (d == 0 and cross_product(points[i], points[pos]) > cross_product(points[q], points[pos])):
+            if d > 0 or (d == 0 and points[i] * points[pos] > points[q] * points[pos]):
                 q = i
         pos = q
         if pos == index:
