@@ -14,6 +14,9 @@ class Point:
     def is_right_turn(self, p):
         return (self * p) > 0
 
+    def is_collinear(self, p):
+        return (self * p) == 0
+
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'
 
