@@ -1,4 +1,11 @@
 import math
+from enum import Enum
+
+
+class Orientation(Enum):
+    LEFT = 1
+    RIGHT = 2
+    LINE = 3
 
 
 class Point:
@@ -18,7 +25,9 @@ class Point:
         return (self * p) == 0
 
     def __str__(self):
-        return '(' + str(self.x) + ', ' + str(self.y) + ')'
+        return '(' + str(self.x) + ', ' + str(self.y) + ')\nCW:' \
+                '(' + str(self.cw_next.x) + ', ' + str(self.cw_next.y) + ')\nCCW:' \
+                '(' + str(self.ccw_next.x) + ', ' + str(self.ccw_next.y) + ')\n'
 
     def __eq__(self, p):
         return self.x == p.x and self.y == p.y
@@ -95,6 +104,18 @@ def merge(chull1, chull2):
 def direction(p1, p2, p3):
     # return cross_product(p3.subtract(p1), p2.subtract(p1))
     return (p3 - p1) * (p2 - p1)
+
+
+def orientation(p_line_1, p_line_2, p_check):
+    orient = ((p_line_1.x - p_check.x) * (p_line_2.y - p_check.y)) -\
+             ((p_line_1.y - p_check.y) * (p_line_2.x - p_check.x))
+
+    if orient > 0:
+        return Orientation.LEFT
+    elif orient < 0:
+        return Orientation.RIGHT
+    else:
+        return Orientation.LINE
 
 
 def collinear(p1, p2, p3):

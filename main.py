@@ -1,13 +1,45 @@
 # This is a sample Python script.
 from hull_lib import Point
 from hull_lib import divide_conquer
+from hull_lib import orientation
+from hull_lib import Orientation
+import matplotlib
+import numpy as np
+from hull import ConvexHull
+# from scipy.spatial import ConvexHull, convex_hull_plot_2d
+from matplotlib import pyplot as plt
+
 from hull_lib import jarvis_march
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    points = []
+    matplotlib.use('TkAgg')
+    rng = np.random.default_rng()
+    points = rng.random((16, 2))
+    # points = points[points[:, 0].argsort()]
+    # points = np.sort(points, axis=0)
+    # print(points)
+    # print(points[:, 0])
+    # print(points[:, 1])
+    for p in points[points[:, 0].argsort()]:
+        plt.plot(p[0], p[1], marker="o", markeredgecolor="black", markerfacecolor="black")
 
+    hull = ConvexHull(points)
+    points_result = hull.divide_conquer()
+
+    first = None
+    print_hull = np.array([[points_result[0].x, points_result[0].y]])
+    for p in points_result:
+        if first is None:
+            first = p
+        else:
+            print_hull = np.append(print_hull, [[p.x, p.y]], axis=0)
+    print_hull = np.append(print_hull, [[first.x, first.y]], axis=0)
+
+    plt.plot(print_hull[:, 0], print_hull[:, 1], '-ok', markeredgecolor="black", markerfacecolor="black")
+    plt.show()
+    # points = []
+    '''
     p1 = Point(2, 2)
     p2 = Point(3, 4)
     p3 = Point(7, 3)
@@ -20,7 +52,8 @@ if __name__ == '__main__':
     p10 = Point(15, 3)
     p11 = Point(16, 5)
     p12 = Point(12, 7)
-    # p13 = Point(17, 8)
+    p13 = Point(17, 8)
+    '''
 
     '''
     p1.cw_next = p2
@@ -51,6 +84,7 @@ if __name__ == '__main__':
     # p13.ccw_next = p12
     # p13.cw_next = p7
 
+    '''
     points.append(p1)
     points.append(p2)
     points.append(p3)
@@ -63,11 +97,48 @@ if __name__ == '__main__':
     points.append(p10)
     points.append(p11)
     points.append(p12)
-    # points.append(p13)
+    points.append(p13)
+    '''
 
-    points_original = sorted(points, key=lambda pnt: pnt.x)
+    # plt.rcParams["figure.figsize"] = [20.00, 10]
+    # plt.rcParams["figure.autolayout"] = True
+    # p1 = Point(2, 2)
+    # p2 = Point(3, 4)
+    # p3 = Point(7, 3)
+    # p4 = Point(8, 2)
+    # p5 = Point(10, 5)
+    # p6 = Point(8, 6)
+    # x = [2, 3, 7, 2]
+    # y = [2, 4, 3, 2]
+    # x1 = [8, 10, 8, 8]
+    # y1 = [2, 5, 6, 2]
+    # plt.xlim(0, 5)
+    # plt.ylim(0, 5)
+    # plt.grid()
+    # plt.plot(x, y, '-ok', marker="o", markeredgecolor="black", markerfacecolor="black")
+    # plt.plot(x1, y1, '-ok', marker="o", markeredgecolor="black", markerfacecolor="black")
+    '''
+    for p in points:
+        plt.plot(p.x, p.y, '-ok', marker="o", markeredgecolor="black", markerfacecolor="black")
+    '''
+    # plt.show()
 
-    points = divide_conquer(points_original)
+    # rng = np.random.default_rng()
+    # points = rng.random((30, 2))  # 30 random points in 2-D
+    # print(points)
+    # hull = ConvexHull(points)
+    # print(hull.simplices)
+
+    # plt.plot(points[:, 0], points[:, 1], 'o')
+
+    # for simplex in hull.simplices:
+    #    plt.plot(points[simplex, 0], points[simplex, 1], 'k-')
+
+    # plt.show()
+
+    # points_original = sorted(points, key=lambda pnt: pnt.x)
+
+    # points = divide_conquer(points_original)
 
     '''
     for point1 in points:
@@ -77,9 +148,9 @@ if __name__ == '__main__':
 
     # print(Point(2, 5) * Point(2, 4))
 
-    print('divide: ')
-    for point in points:
-        print(point)
+    # print('divide: ')
+    # for point in points:
+    #     print(point)
     '''
     points = jarvis_march(points_original)
 
