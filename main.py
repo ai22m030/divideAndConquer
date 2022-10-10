@@ -5,7 +5,7 @@ from hull_lib import orientation
 from hull_lib import Orientation
 import matplotlib
 import numpy as np
-from hull import ConvexHull
+from hullv2 import ConvexHull
 # from scipy.spatial import ConvexHull, convex_hull_plot_2d
 from matplotlib import pyplot as plt
 
@@ -15,30 +15,33 @@ from hull_lib import jarvis_march
 if __name__ == '__main__':
     matplotlib.use('TkAgg')
     rng = np.random.default_rng()
-    points = rng.random((16, 2))
+    points = rng.random((12, 2))
     # points = points[points[:, 0].argsort()]
     # points = np.sort(points, axis=0)
     # print(points)
     # print(points[:, 0])
     # print(points[:, 1])
-    for p in points[points[:, 0].argsort()]:
+    for p in points:
         plt.plot(p[0], p[1], marker="o", markeredgecolor="black", markerfacecolor="black")
 
     hull = ConvexHull(points)
     points_result = hull.divide_conquer()
 
-    first = None
-    print_hull = np.array([[points_result[0].x, points_result[0].y]])
+    print(points_result.data)
+
+    first = True
+    print_hull = np.array([[points_result.head().x, points_result.head().y]])
     for p in points_result:
-        if first is None:
-            first = p
+        if first:
+            first = False
         else:
             print_hull = np.append(print_hull, [[p.x, p.y]], axis=0)
-    print_hull = np.append(print_hull, [[first.x, first.y]], axis=0)
+    print_hull = np.append(print_hull, [[points_result.head().x, points_result.head().y]], axis=0)
+
+    print(print_hull)
 
     plt.plot(print_hull[:, 0], print_hull[:, 1], '-ok', markeredgecolor="black", markerfacecolor="black")
     plt.show()
-    # points = []
     '''
     p1 = Point(2, 2)
     p2 = Point(3, 4)
